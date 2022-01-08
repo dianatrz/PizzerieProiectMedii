@@ -64,11 +64,64 @@ namespace ProgramAngajati
             cmbOrar.SelectedValuePath = "OrarId";
             BindDataGrid();
         }
+        private void SetValidationBinding()
+        {
+            Binding prenumeValidationBinding = new Binding();
+            prenumeValidationBinding.Source = angajatiVSource;
+            prenumeValidationBinding.Path = new PropertyPath("Prenume");
+            prenumeValidationBinding.NotifyOnValidationError = true;
+            prenumeValidationBinding.Mode = BindingMode.TwoWay;
+            prenumeValidationBinding.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
+            //string required
+            prenumeValidationBinding.ValidationRules.Add(new StringNotEmpty());
+            //prenumeValidationBinding.ValidationRules.Add(new StringMinLengthValidator());
+            prenumeTextBox.SetBinding(TextBox.TextProperty, prenumeValidationBinding);
+            Binding numeValidationBinding = new Binding();
+            numeValidationBinding.Source = angajatiVSource;
+            numeValidationBinding.Path = new PropertyPath("Nume");
+            numeValidationBinding.NotifyOnValidationError = true;
+            numeValidationBinding.Mode = BindingMode.TwoWay;
+            numeValidationBinding.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
+            //string min length validator
+            //numeValidationBinding.ValidationRules.Add(new StringMinLengthValidator());
+            numeValidationBinding.ValidationRules.Add(new StringNotEmpty());
+            numeTextBox.SetBinding(TextBox.TextProperty, numeValidationBinding); //setare binding nou
+            Binding postValidationBinding = new Binding();
+            postValidationBinding.Source = angajatiVSource;
+            postValidationBinding.Path = new PropertyPath("Post");
+            postValidationBinding.NotifyOnValidationError = true;
+            postValidationBinding.Mode = BindingMode.TwoWay;
+            postValidationBinding.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
+            //string required
+            postValidationBinding.ValidationRules.Add(new StringNotEmpty());
+            postTextBox.SetBinding(TextBox.TextProperty, postValidationBinding);
+            Binding turaValidationBinding = new Binding();
+            turaValidationBinding.Source = orarVSource;
+            turaValidationBinding.Path = new PropertyPath("Tura");
+            turaValidationBinding.NotifyOnValidationError = true;
+            turaValidationBinding.Mode = BindingMode.TwoWay;
+            turaValidationBinding.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
+            //string required
+            turaValidationBinding.ValidationRules.Add(new StringNotEmpty());
+            turaTextBox.SetBinding(TextBox.TextProperty, turaValidationBinding);
+            Binding ziuaSaptamaniiValidationBinding = new Binding();
+            ziuaSaptamaniiValidationBinding.Source = orarVSource;
+            ziuaSaptamaniiValidationBinding.Path = new PropertyPath("ZiuaSaptamanii");
+            ziuaSaptamaniiValidationBinding.NotifyOnValidationError = true;
+            ziuaSaptamaniiValidationBinding.Mode = BindingMode.TwoWay;
+            ziuaSaptamaniiValidationBinding.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
+            //string required
+            ziuaSaptamaniiValidationBinding.ValidationRules.Add(new StringNotEmpty());
+            ziuaSaptamaniiTextBox.SetBinding(TextBox.TextProperty, ziuaSaptamaniiValidationBinding);
+        }
         private void btnAdd_Click(object sender, RoutedEventArgs e)
         {
             action = ActionState.New;
             BindingOperations.ClearBinding(prenumeTextBox, TextBox.TextProperty);
             BindingOperations.ClearBinding(numeTextBox, TextBox.TextProperty);
+            BindingOperations.ClearBinding(postTextBox, TextBox.TextProperty);
+            BindingOperations.ClearBinding(turaTextBox, TextBox.TextProperty);
+            BindingOperations.ClearBinding(ziuaSaptamaniiTextBox, TextBox.TextProperty);
             SetValidationBinding();
         }
         private void btnEdit_Click(object sender, RoutedEventArgs e)
@@ -76,6 +129,9 @@ namespace ProgramAngajati
             action = ActionState.Edit;
             BindingOperations.ClearBinding(prenumeTextBox, TextBox.TextProperty);
             BindingOperations.ClearBinding(numeTextBox, TextBox.TextProperty);
+            BindingOperations.ClearBinding(postTextBox, TextBox.TextProperty);
+            BindingOperations.ClearBinding(turaTextBox, TextBox.TextProperty);
+            BindingOperations.ClearBinding(ziuaSaptamaniiTextBox, TextBox.TextProperty);
             SetValidationBinding();
         }
         private void btnDelete_Click(object sender, RoutedEventArgs e)
@@ -353,29 +409,6 @@ namespace ProgramAngajati
                     MessageBox.Show(ex.Message);
                 }
             }
-        }
-        private void SetValidationBinding()
-        {
-            Binding prenumeValidationBinding = new Binding();
-            prenumeValidationBinding.Source = angajatiVSource;
-            prenumeValidationBinding.Path = new PropertyPath("Prenume");
-            prenumeValidationBinding.NotifyOnValidationError = true;
-            prenumeValidationBinding.Mode = BindingMode.TwoWay;
-            prenumeValidationBinding.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
-            //string required
-            prenumeValidationBinding.ValidationRules.Add(new StringNotEmpty());
-            prenumeValidationBinding.ValidationRules.Add(new StringMinLengthValidator());
-            prenumeTextBox.SetBinding(TextBox.TextProperty, prenumeValidationBinding);
-            Binding numeValidationBinding = new Binding();
-            numeValidationBinding.Source = angajatiVSource;
-            numeValidationBinding.Path = new PropertyPath("Nume");
-            numeValidationBinding.NotifyOnValidationError = true;
-            numeValidationBinding.Mode = BindingMode.TwoWay;
-            numeValidationBinding.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
-            //string min length validator
-            numeValidationBinding.ValidationRules.Add(new StringMinLengthValidator());
-            numeValidationBinding.ValidationRules.Add(new StringNotEmpty());
-            numeTextBox.SetBinding(TextBox.TextProperty, numeValidationBinding); //setare binding nou
         }
         private void angajatiDataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
