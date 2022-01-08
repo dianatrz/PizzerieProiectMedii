@@ -1,0 +1,206 @@
+﻿<Window
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ProgramAngajati"
+        xmlns:PizzeriaModel="clr-namespace:PizzeriaModel;assembly=PizzeriaModel" x:Class="ProgramAngajati.MainWindow"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800" Loaded="Window_Loaded">
+    <Window.Resources>
+        <CollectionViewSource x:Key="angajatiViewSource" d:DesignSource="{d:DesignInstance {x:Type PizzeriaModel:Angajati}, CreateList=True}"/>
+        <CollectionViewSource x:Key="orarViewSource" d:DesignSource="{d:DesignInstance {x:Type PizzeriaModel:Orar}, CreateList=True}"/>
+        <CollectionViewSource x:Key="angajatiProgramsViewSource" Source="{Binding Programs, Source={StaticResource angajatiViewSource}}"/>
+        <ControlTemplate x:Key="validationTemplate">
+            <DockPanel>
+                <TextBlock Foreground="Red" FontSize="20">!</TextBlock>
+                <AdornedElementPlaceholder/>
+            </DockPanel>
+        </ControlTemplate>
+        <Style x:Key="textBoxInError" TargetType="{x:Type TextBox}">
+            <Style.Triggers>
+                <Trigger Property="Validation.HasError" Value="true">
+                    <Setter Property="ToolTip" Value="{Binding RelativeSource={x:Static RelativeSource.Self}, Path=(Validation.Errors)/ErrorContent}"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
+    <Grid>
+        <TabControl x:Name="tbCtrlPizzeria" HorizontalAlignment="Left" Height="414" Margin="183,-1,0,0" VerticalAlignment="Top" Width="602" RenderTransformOrigin="0.5,0.5">
+            <TabControl.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform Angle="-0.09"/>
+                    <TranslateTransform/>
+                </TransformGroup>
+            </TabControl.RenderTransform>
+            <TabItem Header="Angajati">
+                <Grid Background="#FFE5E5E5" DataContext="{StaticResource angajatiViewSource}" Margin="0,0,-8,-9">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="73*"/>
+                        <ColumnDefinition Width="501*"/>
+                    </Grid.ColumnDefinitions>
+                    <DataGrid x:Name="angajatiDataGrid" AutoGenerateColumns="False" EnableRowVirtualization="True" ItemsSource="{Binding}" Margin="10,10,65,200" RowDetailsVisibilityMode="VisibleWhenSelected" Grid.ColumnSpan="2" SelectionChanged="angajatiDataGrid_SelectionChanged">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn x:Name="angajatiIdColumn" Binding="{Binding AngajatiId}" Header="Angajati Id" Width="SizeToHeader"/>
+                            <DataGridTextColumn x:Name="numeColumn" Binding="{Binding Nume}" Header="Nume" Width="SizeToHeader"/>
+                            <DataGridTextColumn x:Name="prenumeColumn" Binding="{Binding Prenume}" Header="Prenume" Width="SizeToHeader"/>
+                            <DataGridTemplateColumn x:Name="dataNastereColumn" Header="Data Nastere" Width="SizeToHeader">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <DatePicker SelectedDate="{Binding DataNastere, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn x:Name="dataAngajareColumn" Header="Data Angajare" Width="SizeToHeader">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <DatePicker SelectedDate="{Binding DataAngajare, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTextColumn x:Name="postColumn" Binding="{Binding Post}" Header="Post" Width="SizeToHeader"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    <Grid x:Name="grid1" HorizontalAlignment="Left" Margin="50,190,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Label Content="Angajati Id:" Grid.Column="0" HorizontalAlignment="Left" Margin="3" Grid.Row="0" VerticalAlignment="Center"/>
+                        <TextBox x:Name="angajatiIdTextBox" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="3" Grid.Row="0" Text="{Binding AngajatiId, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" VerticalAlignment="Center" Width="120" IsEnabled="False"/>
+                        <Label Content="Data Angajare:" Grid.Column="0" HorizontalAlignment="Left" Margin="3" Grid.Row="4" VerticalAlignment="Center"/>
+                        <DatePicker x:Name="dataAngajareDatePicker" Grid.Column="1" HorizontalAlignment="Left" Margin="3" Grid.Row="4" SelectedDate="{Binding DataAngajare, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" VerticalAlignment="Center"/>
+                        <Label Content="Data Nastere:" Grid.Column="0" HorizontalAlignment="Left" Margin="3" Grid.Row="3" VerticalAlignment="Center"/>
+                        <DatePicker x:Name="dataNastereDatePicker" Grid.Column="1" HorizontalAlignment="Left" Margin="3" Grid.Row="3" SelectedDate="{Binding DataNastere, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" VerticalAlignment="Center"/>
+                        <Label Content="Nume:" Grid.Column="0" HorizontalAlignment="Left" Margin="3" Grid.Row="1" VerticalAlignment="Center"/>
+                        <TextBox x:Name="numeTextBox" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="3" Grid.Row="1" Text="{Binding Nume, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" VerticalAlignment="Center" Width="120" Validation.ErrorTemplate="{StaticResource validationTemplate}" Style="{StaticResource textBoxInError}"/>
+                        <Label Content="Post:" Grid.Column="0" HorizontalAlignment="Left" Margin="3" Grid.Row="5" VerticalAlignment="Center"/>
+                        <TextBox x:Name="postTextBox" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="3" Grid.Row="5" Text="{Binding Post, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" VerticalAlignment="Center" Width="120" Validation.ErrorTemplate="{StaticResource validationTemplate}" Style="{StaticResource textBoxInError}"/>
+                        <Label Content="Prenume:" Grid.Column="0" HorizontalAlignment="Left" Margin="3" Grid.Row="2" VerticalAlignment="Center"/>
+                        <TextBox x:Name="prenumeTextBox" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="3" Grid.Row="2" Text="{Binding Prenume, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" VerticalAlignment="Center" Width="120" Validation.ErrorTemplate="{StaticResource validationTemplate}" Style="{StaticResource textBoxInError}"/>
+                    </Grid>
+                    <Button x:Name="btnPrevAng" Content="Anterior" HorizontalAlignment="Left" Margin="224.554,196,0,0" VerticalAlignment="Top" Width="75" Grid.Column="1" Button.Click="btnPrevAng_Click"/>
+                    <Button x:Name="btnNextAng" Content="Urmatorul" HorizontalAlignment="Left" Margin="333.554,196,0,0" VerticalAlignment="Top" Width="75" Grid.Column="1" Button.Click="btnNextAng_Click"/>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Orar">
+                <Grid Background="#FFE5E5E5" DataContext="{StaticResource orarViewSource}" Margin="0,-4,0,4">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="6*"/>
+                        <ColumnDefinition Width="7*"/>
+                        <ColumnDefinition Width="270*"/>
+                    </Grid.ColumnDefinitions>
+                    <DataGrid x:Name="orarDataGrid" AutoGenerateColumns="False" EnableRowVirtualization="True" ItemsSource="{Binding}" Margin="0,0,85,218" RowDetailsVisibilityMode="VisibleWhenSelected" Grid.ColumnSpan="3">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn x:Name="orarIdColumn" Binding="{Binding OrarId}" Header="Orar Id" Width="SizeToHeader"/>
+                            <DataGridTemplateColumn x:Name="dataIntreagaColumn" Header="Data Intreaga" Width="SizeToHeader">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <DatePicker SelectedDate="{Binding DataIntreaga, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTextColumn x:Name="turaColumn" Binding="{Binding Tura}" Header="Tura" Width="SizeToHeader"/>
+                            <DataGridTextColumn x:Name="ziuaSaptamaniiColumn" Binding="{Binding ZiuaSaptamanii}" Header="Ziua Saptamanii" Width="SizeToHeader"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    <Grid x:Name="grid2" HorizontalAlignment="Left" Margin="19,193,0,0" VerticalAlignment="Top" Grid.Column="2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Label Content="Data Intreaga:" Grid.Column="0" HorizontalAlignment="Left" Margin="3" Grid.Row="2" VerticalAlignment="Center"/>
+                        <DatePicker x:Name="dataIntreagaDatePicker" Grid.Column="1" HorizontalAlignment="Left" Margin="3" Grid.Row="2" SelectedDate="{Binding DataIntreaga, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" VerticalAlignment="Center"/>
+                        <Label Content="Orar Id:" Grid.Column="0" HorizontalAlignment="Left" Margin="3" Grid.Row="0" VerticalAlignment="Center"/>
+                        <TextBox x:Name="orarIdTextBox" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="3" Grid.Row="0" Text="{Binding OrarId, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" VerticalAlignment="Center" Width="120" IsEnabled="False"/>
+                        <Label Content="Tura:" Grid.Column="0" HorizontalAlignment="Left" Margin="3" Grid.Row="3" VerticalAlignment="Center"/>
+                        <TextBox x:Name="turaTextBox" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="3" Grid.Row="3" Text="{Binding Tura, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" VerticalAlignment="Center" Width="120" Validation.ErrorTemplate="{StaticResource validationTemplate}" Style="{StaticResource textBoxInError}"/>
+                        <Label Content="Ziua Saptamanii:" Grid.Column="0" HorizontalAlignment="Left" Margin="3" Grid.Row="4" VerticalAlignment="Center"/>
+                        <TextBox x:Name="ziuaSaptamaniiTextBox" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="3" Grid.Row="4" Text="{Binding ZiuaSaptamanii, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" VerticalAlignment="Center" Width="120" Validation.ErrorTemplate="{StaticResource validationTemplate}" Style="{StaticResource textBoxInError}"/>
+                    </Grid>
+                    <Button x:Name="btnPrevOrar" Content="Anterior" HorizontalAlignment="Left" Margin="266,178,0,0" VerticalAlignment="Top" Width="75" Grid.Column="2" Button.Click="btnPrevOrar_Click"/>
+                    <Button x:Name="btnNextOrar" Content="Urmatorul" HorizontalAlignment="Left" Margin="380,178,0,0" VerticalAlignment="Top" Width="75" Grid.Column="2" Button.Click="btnNextOrar_Click"/>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Program">
+                <Grid Background="#FFE5E5E5" DataContext="{StaticResource angajatiProgramsViewSource}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="3*"/>
+                        <ColumnDefinition Width="73*"/>
+                    </Grid.ColumnDefinitions>
+                    <ComboBox x:Name="cmbOrar" Grid.Column="1" HorizontalAlignment="Left" Margin="348,50,0,0" VerticalAlignment="Top" Width="120" SelectedValue="{Binding ElementName=programsDataGrid, Path=SelectedItem.OrarId, Mode=OneWay}">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock>
+                                    <TextBlock.Text>
+                                        <MultiBinding StringFormat="{}{0} - {1}">
+                                            <Binding Path="DataIntreaga"/>
+                                            <Binding Path="Tura"/>
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+                    <ComboBox x:Name="cmbAngajati" Grid.Column="1" HorizontalAlignment="Left" Margin="94,50,0,0" VerticalAlignment="Top" Width="120" SelectedValue="{Binding ElementName=programsDataGrid, Path=SelectedItem.AngajatiId, Mode=OneWay}">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock>
+                                    <TextBlock.Text>
+                                        <MultiBinding StringFormat="{}{0} {1}">
+                                            <Binding Path="Nume"/>
+                                            <Binding Path="Prenume"/>
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+                    <Label x:Name="lblAngajati" Content="Angajati" Grid.Column="1" HorizontalAlignment="Left" Margin="125,19,0,0" VerticalAlignment="Top"/>
+                    <Label x:Name="lblOrar" Content="Orar" Grid.Column="1" HorizontalAlignment="Left" Margin="393,19,0,0" VerticalAlignment="Top"/>
+                    <DataGrid x:Name="programsDataGrid" AutoGenerateColumns="False" EnableRowVirtualization="True" ItemsSource="{Binding}" RowDetailsVisibilityMode="VisibleWhenSelected" IsSynchronizedWithCurrentItem="True" Margin="66,108,32,90" Grid.Column="1">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn x:Name="NumeColumn" Binding="{Binding Nume}" Header="Nume" Width="SizeToHeader"/>
+                            <DataGridTextColumn x:Name="PrenumeColumn" Binding="{Binding Prenume}" Header="Prenume" Width="SizeToHeader"/>
+                            <DataGridTextColumn x:Name="DataIntreagaColumn" Binding="{Binding DataIntreaga}" Header="Data Intreaga" Width="SizeToHeader"/>
+                            <DataGridTextColumn x:Name="TuraColumn" Binding="{Binding Tura}" Header="Tura" Width="SizeToHeader"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </TabItem>
+        </TabControl>
+        <GroupBox x:Name="gbOperations" Button.Click="gbOperations_Click" HorizontalAlignment="Left" Height="95" Margin="37,58,0,0" VerticalAlignment="Top" Width="100">
+            <StackPanel x:Name="spOperations" RenderTransformOrigin="0.24,2.257" Margin="0,0,0,23">
+                <Button x:Name="btnAdd" Content="Adauga" HorizontalAlignment="Left"  VerticalAlignment="Top" Width="75" Button.Click="btnAdd_Click"/>
+                <Button x:Name="btnEdit" Content="Editeaza" HorizontalAlignment="Left"  VerticalAlignment="Top" Width="75" Button.Click="btnEdit_Click"/>
+                <Button x:Name="btnDelete" Content="Sterge" HorizontalAlignment="Left"  VerticalAlignment="Top" Width="75" Button.Click="btnDelete_Click"/>
+            </StackPanel>
+        </GroupBox>
+        <GroupBox x:Name="gbActions" HorizontalAlignment="Left" Height="95" Margin="37,226,0,0" VerticalAlignment="Top" Width="100">
+            <StackPanel x:Name="spActions" RenderTransformOrigin="0.24,2.257" Margin="-1,38,10,-155">
+                <Button x:Name="btnSave" Content="Salveaza" HorizontalAlignment="Left"  VerticalAlignment="Top" Width="75" Click="btnSave_Click"/>
+                <Button x:Name="btnCancel" Content="Anuleaza" HorizontalAlignment="Left"  VerticalAlignment="Top" Width="75" Click="btnCancel_Click"/>
+            </StackPanel>
+        </GroupBox>
+
+
+
+    </Grid>
+</Window>
